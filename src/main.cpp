@@ -1,18 +1,68 @@
-#include <Arduino.h>
+#include "main.h"
 
-// put function declarations here:
-int myFunction(int, int);
+Communik comm;
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  // init logging
+  Serial.begin(BAUDRATE);
+  Serial.println("Beginning startup process.");
+  comm.init();
+  // start display
+  // start acces-point
+
+
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
 }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+
+/*
+#include "WiFi.h"
+#include "AsyncUDP.h"
+
+const char *ssid = "***********";
+const char *password = "***********";
+
+AsyncUDP udp;
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  if (WiFi.waitForConnectResult() != WL_CONNECTED) {
+    Serial.println("WiFi Failed");
+    while (1) {
+      delay(1000);
+    }
+  }
+  if (udp.listen(1234)) {
+    Serial.print("UDP Listening on IP: ");
+    Serial.println(WiFi.localIP());
+    udp.onPacket([](AsyncUDPPacket packet) {
+      Serial.print("UDP Packet Type: ");
+      Serial.print(packet.isBroadcast() ? "Broadcast" : packet.isMulticast() ? "Multicast" : "Unicast");
+      Serial.print(", From: ");
+      Serial.print(packet.remoteIP());
+      Serial.print(":");
+      Serial.print(packet.remotePort());
+      Serial.print(", To: ");
+      Serial.print(packet.localIP());
+      Serial.print(":");
+      Serial.print(packet.localPort());
+      Serial.print(", Length: ");
+      Serial.print(packet.length());
+      Serial.print(", Data: ");
+      Serial.write(packet.data(), packet.length());
+      Serial.println();
+      //reply to the client
+      packet.printf("Got %u bytes of data", packet.length());
+    });
+  }
 }
+
+void loop() {
+  delay(1000);
+  //Send broadcast
+  udp.broadcast("Anyone here?");
+}*/
