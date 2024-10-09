@@ -1,5 +1,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
+
+    #include "ArduinoLog.h"
+    
     // #define IS_SERVER
     #define IS_CLIENT
 
