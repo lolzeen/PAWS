@@ -2,17 +2,32 @@
 #include "WiFi.h"
 #include "Config.h"
 #include "DataStorage.h"
+#include "ArduinoLog.h"
 
 Communik::Communik() {
     // constructor
 }
 
 void Communik::init() {
-    Serial.println("Communik initialization started.");
-    WiFi.softAP(SSID, PSK);
-    Serial.print("Access point started with IP address: ");
-    Serial.println(WiFi.softAPIP());
-
+    #ifdef IS_SERVER
+        Log.trace(F("Communik initialization started.\n"));
+        WiFi.softAP(SSID, PSK);
+        Log.notice(F("Access point started with IP address: "), WiFi.softAPIP());
+    #endif
+    #ifdef IS_CLIENT
+        Log.traceln(F("Communik initialization started."));
+        int wifiStatus = WL_DISCONNECTED;
+        uint8_t num_retires = 0;
+        while (wifiStatus != WL_CONNECTED) {
+            if (num_retires > 1) {
+                Log.warning(F("Attempting to connect to server, retries: "), num_retires);
+            }
+            wifiStatus = WiFi.begin(SSID, PSK);
+            delay(500);
+            num_retires = num_retires + 1;
+        }
+        Log.notice(F("Coonected to: "), WiFi.gatewayIP());
+    #endif
 }
 
 void Communik::sendPacket(AsyncUDPPacket* packet) {
