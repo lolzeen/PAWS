@@ -1,35 +1,38 @@
+#include "Config.h"
 #include "SensorControl.h"
 #include "ArduinoLog.h"
+
 
 SensorControl::SensorControl() {
     
 }
 
-void SensorControl::begin() {
-    Log.notice(F("Initializing SensorControl...\n"));
+void SensorControl::init_sensors() {
+    Log.noticeln(F("Initializing SensorControl...\n"));
+    Wire.begin(MPU_SDA_PIN, MPU_SCL_PIN, I2C_FREQ);
     if (!sensor.begin()) {
-        Log.error(F("Failed to find MPU6050 chip\n"));
+        Log.errorln(F("Failed to find MPU6050 chip\n"));
         delay(1000);
         ESP.restart();
         return;
     }
-    Log.notice(F("MPU6050 chip found. Configuring sensor settings...\n"));
+    Log.noticeln(F("MPU6050 chip found. Configuring sensor settings...\n"));
     sensor.setAccelerometerRange(MPU6050_RANGE_2_G);
     sensor.setGyroRange(MPU6050_RANGE_250_DEG);
     sensor.setHighPassFilter(MPU6050_HIGHPASS_1_25_HZ);
     sensor.setFilterBandwidth(MPU6050_BAND_10_HZ);
     sensorUUID.generate();
-    Log.notice(F("Sensor UUID generated: %s\n"), sensorUUID.toCharArray());
+    Log.noticeln(F("Sensor UUID generated: %s\n"), sensorUUID.toCharArray());
 }
 
 SensorData SensorControl::getReading() {
-    Log.trace(F("Attempting to get a reading from the buffer...%d\n"), bufferTail);
+    Log.traceln(F("Attempting to get a reading from the buffer...%d\n"), bufferTail);
     if (bufferHead == bufferTail and !bufferIsFull) {
-        Log.error(F("Failed to retrieve data from Sensor. Buffer is empty!\n"));
+        Log.errorln(F("Failed to retrieve data from Sensor. Buffer is empty!\n"));
         return SensorData();
     }
     else {
-        Log.notice(F("Buffer not empty, returning reading from buffer position %d\n"), bufferTail);
+        Log.noticeln(F("Buffer not empty, returning reading from buffer position %d\n"), bufferTail);
         uint8_t tempIndex = bufferTail;
         advanceBufferTail();
         return circularBuffer[tempIndex];
@@ -38,7 +41,7 @@ SensorData SensorControl::getReading() {
 
 void SensorControl::getSensorUUIDAsCharArray(char* output) {
     sprintf(output, "%s", sensorUUID.toCharArray());
-    Log.trace(F("Retrieving Sensor UUID: %s\n"), output);
+    Log.traceln(F("Retrieving Sensor UUID: %s\n"), output);
 }
 
 void SensorControl::parseSensorDataToCharArray(const SensorData& data, char* output, size_t outputSize) {
@@ -57,31 +60,31 @@ void SensorControl::parseSensorDataToCharArray(const SensorData& data, char* out
 void SensorControl::performReading() {
     SensorData data;
     char parsedData[128];
-    Log.trace(F("Performing reading from MPU6050 sensor...\n"));
+    Log.traceln(F("Performing reading from MPU6050 sensor...\n"));
     sensor.getEvent(&data.accelData, &data.gyroData, &data.temperatureData);
     parseSensorDataToCharArray(data, parsedData, sizeof(parsedData));
-    Log.trace(F("Captured Sensor Data: %s\n"), parsedData);
-    Log.trace(F("Saving data at buffer position %d\n"), bufferHead);
+    Log.traceln(F("Captured Sensor Data: %s\n"), parsedData);
+    Log.traceln(F("Saving data at buffer position %d\n"), bufferHead);
     circularBuffer[bufferHead] = data;
     advanceBufferHead();
 }
 
 void SensorControl::advanceBufferHead() {
-    Log.trace(F("Advancing buffer head from position %d...\n"), bufferHead);
+    Log.traceln(F("Advancing buffer head from position %d...\n"), bufferHead);
     bufferHead = (bufferHead + 1) % BUFFER_SIZE;
     if (bufferHead == bufferTail && bufferHead == BUFFER_SIZE) {
-        Log.warning(F("Buffer is full. Buffer head at %d\n"), bufferHead);
+        Log.warningln(F("Buffer is full. Buffer head at %d\n"), bufferHead);
         bufferIsFull = true;
     }
     else {
-        Log.notice(F("Buffer head advanced to %d. Buffer is not full.\n"), bufferHead);
+        Log.noticeln(F("Buffer head advanced to %d. Buffer is not full.\n"), bufferHead);
         bufferIsFull = false;
     }
 }
 void SensorControl::advanceBufferTail() {
-    Log.trace(F("Advancing buffer tail from position %d...\n"), bufferTail);
+    Log.traceln(F("Advancing buffer tail from position %d...\n"), bufferTail);
     bufferTail = (bufferTail + 1) % BUFFER_SIZE;
-    Log.notice(F("Buffer tail advanced to %d\n"), bufferTail);
+    Log.noticeln(F("Buffer tail advanced to %d\n"), bufferTail);
 }
 
 

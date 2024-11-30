@@ -1,7 +1,8 @@
-#ifndef PAWS_COMMUNIK_UDPMESSAGE_H
-#define PAWS_COMMUNIK_UDPMESSAGE_H
+#ifndef PAWS_COMMUNICATION_CONTROL_UDPMESSAGE_H
+#define PAWS_COMMUNICATION_CONTROL_UDPMESSAGE_H
 #include<Arduino.h>
 
+namespace Communication {
 class UdpMessage {
 public:
     // Enum for message types
@@ -57,7 +58,11 @@ public:
     };
 
     // Constructor
-    UdpMessage(MessageType type,const String& hostID, const String& clientID,  const uint8_t& payload)
+    UdpMessage(MessageType type,const char& hostID, const char& clientID,  const char& payload)
+        : type(type), hostID(hostID), clientID(clientID), payload(payload) {
+        timestamp = millis(); // Timestamp in milliseconds since program start
+    }
+    UdpMessage(MessageType type,const String& hostID, const String& clientID,  const char& payload)
         : type(type), hostID(hostID), clientID(clientID), payload(payload) {
         timestamp = millis(); // Timestamp in milliseconds since program start
     }
@@ -94,7 +99,7 @@ private:
     String hostID;
     String clientID;
     long timestamp;
-    uint8_t payload;
+    String payload;
 
     // Helper to convert MessageType to String
     String messageTypeToString(MessageType type) const {
@@ -115,5 +120,5 @@ private:
         return false;
     }
 };
-
-#endif // PAWS_COMMUNIK_UDPMESSAGE_H
+} // namespace Communication
+#endif // PAWS_COMMUNICATION_CONTROL_UDPMESSAGE_H

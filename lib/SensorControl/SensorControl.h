@@ -12,7 +12,7 @@ struct SensorData {
 class SensorControl {
     public:
         SensorControl();
-        void begin();
+        void init_sensors();
         SensorData getReading();
         void getSensorUUIDAsCharArray(char* output);
         void parseSensorDataToCharArray(const SensorData& data, char* output, size_t outputSize);
@@ -21,8 +21,6 @@ class SensorControl {
         uint8_t getBufferTail() const { return bufferTail; }
         uint8_t getBufferSize() const { return BUFFER_SIZE; }
         bool isBufferFull() const { return bufferIsFull; }
-
-
     private:
         UUID sensorUUID;
         static const uint8_t BUFFER_SIZE = 42;
