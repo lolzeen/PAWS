@@ -22,7 +22,7 @@ void CommunicationControl::init_communication() {
         Log.noticeln(F("Coonected to: %s"), WiFi.localIP().toString().c_str(), F("\n"));
         udp.connect(IPAddress(192, 0, 0, 2), 5555);
         udp.print("Hello Server!");
-        Communication::UdpMessage message(Communication::UdpMessage::DATA,
+        Communication::UdpMessage message(,
         "server",
         "clientOne",
         "Hello Serever");
@@ -40,8 +40,8 @@ void CommunicationControl::connectToClient() {
     #endif
 }
 
-void CommunicationControl::sendData(const char* data) {
-    udp.print(data);
+void CommunicationControl::sendData(const Communication::UdpMessage message) {
+    udp.print(message.toString());
 }
 
 void CommunicationControl::onPacket(AsyncUDPPacket* recievedPacket) {

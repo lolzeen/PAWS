@@ -79,7 +79,7 @@ public:
     String getHostID() const {return hostID; }
     String getClientID() const { return clientID; }
     long getTimestamp() const { return timestamp; }
-    uint8_t getPayload() const { return payload; }
+    String getPayload() const { return payload; }
 
     // Serialize the message for transmission
     String toString() const {

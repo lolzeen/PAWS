@@ -11,17 +11,16 @@ struct StaticContent {
     unsigned short uid;
     char background[1024];
     
-}
+};
 
 class ScreenContent
 {
-private:
-    unsigned short uid;
-    bool isActive;
 
 public:
     ScreenContent();
     ~ScreenContent();
+
+    void init_screen();
 
     void refresh();
     
@@ -29,17 +28,11 @@ public:
 
     bool getState() const {return isActive;}
     
+private:
+    unsigned short uid;
+    bool isActive;
 
 };
-
-ScreenContent::ScreenContent()
-{
-
-}
-
-ScreenContent::~ScreenContent()
-{
-}
 
 
 #endif //PAWS_LIB_VISUCONTROL_SCREENCONTENT_H
