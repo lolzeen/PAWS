@@ -1,8 +1,8 @@
 #pragma once
 #include "ArduinoLog.h"
 
-// #define IS_SERVER
-#define IS_CLIENT
+#define IS_SERVER
+//#define IS_CLIENT
 
 // #define HAS_RTC
 // #define HAS_BATTERY
@@ -14,9 +14,9 @@
 
 #ifdef IS_SERVER
     #define ENC_A_PIN 25
-    #define ENC_B_PIN 32
+    #define ENC_B_PIN 33
     #define ENC_BTN_PIN 35
-    #define BUZ_PIN 33
+    #define BUZ_PIN 32
     #define LCD_RW_PIN 23 
     #define LCD_RS_PIN 22
     #define LCD_EN_PIN 18
