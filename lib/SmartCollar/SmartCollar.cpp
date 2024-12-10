@@ -11,5 +11,5 @@ SmartCollar::~SmartCollar()
 void SmartCollar::init() {
     init_communication();
     init_sensors();
-
+    
 }

@@ -29,6 +29,7 @@
 #endif
 
 #ifdef IS_CLIENT
+    // #define ENABLE_GYRO
     #define MPU_SCL_PIN 22
     #define MPU_SDA_PIN 23
     #define MPU_INT_PIN 34

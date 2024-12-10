@@ -3,14 +3,9 @@
     #include "AsyncUDP.h"
     #include "WiFi.h"
     #include "Config.h"
-    #include "DataStorage.h"
     #include "ArduinoLog.h"
-    
-
-    struct Packet {
-        uint8_t deviceName;
-    
-    };
+    #include "UdpMessage.h"
+    #include "SensorData.h"
 
     /**
      * @brief starts communication, send data and process incomming data.
@@ -21,19 +16,19 @@
             CommunicationControl();
             void init_communication();
             void connectToClient();
-            void sendData(const char* data);
-            
-            CommunicationControl(CommunicationControl const&) = delete;
-            void operator=(CommunicationControl const&) = delete;
-            
+            void convertAsyncUDPPacketToUDPMessage(AsyncUDPPacket packet, Communication::UdpMessage<String>* output);
+            void receiveData(String* output); 
+            void sendData(Communication::UdpMessage<String> message);
+            void sendData(Communication::UdpMessage<char*> message);
+            void sendData(Communication::UdpMessage<SensorData*> buffer);
+            void sendDataXTimes(Communication::UdpMessage<String> message, uint8_t times);
+            void sendDataXTimes(Communication::UdpMessage<SensorData*> buffer, uint8_t times); 
         private:
+            AsyncUDP _udp;
 
-            AsyncUDP udp;
-            void sendPacket(AsyncUDPPacket* packet);
-            void onPacket(AsyncUDPPacket* recievedPacket);
-            bool checkIfDataIsComplete(uint8_t* data);
-            // void parsePacketToData(AsyncUDPPacket* packet);
-            // AsyncUDPPacket parseDataToPacket(uint8_t* data);
+            void sendData(const char* data);
+            bool checkIfDataIsComplete(String data);
+            bool checkIfDataIsNew(String data);
     };
 
 #endif // PAWS_LIB_COMMUNICATION_CONTROL_H

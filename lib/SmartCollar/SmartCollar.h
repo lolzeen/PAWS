@@ -10,6 +10,7 @@ public:
     ~SmartCollar();
 
     void init();
+    void loop();
 
 private:
 };
