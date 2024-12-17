@@ -1,26 +1,28 @@
 #include "Config.h"
 #include <Arduino.h>
-#include "SmartCollar.h"
-#include "SmartServer.h"
-
 #ifdef IS_CLIENT
-SmartCollar smartCollarOne;
+#include "SmartCollar.h"
+#elif defined IS_SERVER
+#include "SmartServer.h"
 #endif
 
-
-bool enable_live_logging = true;
-bool acquire_data = true;
-bool send_data = true;
-bool was_button_pressed = false;
-bool encoder_to_the_right = false;
-bool encoder_to_the_left = false;
+#ifdef IS_CLIENT
+// #undef IS_CLIENT
+SmartCollar smartCollarOne;
+// #define IS_SERVER
+#endif
+#ifdef IS_SERVER
+SmartServer smartServer;
+#endif
 
 void setup()
 {
-    Serial.begin(BAUDRATE);
-    Log.begin(LOG_LEVEL_VERBOSE, &Serial); // define logging level
-    delay(500);
+#ifdef IS_CLIENT
     smartCollarOne.init();
+#elif defined IS_SERVER
+    smartServer.bootUp();
+    delay(500);
+#endif
 }
 
 void loop()
@@ -48,28 +50,8 @@ void loop()
     }
     delay(100);
 #elif defined IS_SERVER
-
-    if (enable_live_logging)
-    {
-        // display data contained in the buffer
-    }
-
-    if (was_button_pressed)
-    {
-        // perform next action (define a state machine for the menu screens)
-        // the same function should be used for both button and encoder
-    }
-
-    if (encoder_to_the_right)
-    {
-        // perform next action (define a state machine for the menu screens)
-    }
-
-    if (encoder_to_the_left)
-    {
-        // perform next action (define a state machine for the menu screens)
-    }
     Serial.println(WiFi.softAPgetStationNum());
+    // update display
 #endif
-    delay(100);
+    delay(1000);
 }

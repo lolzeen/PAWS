@@ -37,3 +37,6 @@ Type Buffer<Type>::retieveData() {
     advanceBufferTail();
     return circularBuffer[tempIndex];
 }
+
+template class Buffer<SensorData>;
+template class Buffer<String>;

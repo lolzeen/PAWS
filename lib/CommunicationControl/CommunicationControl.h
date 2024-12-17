@@ -14,7 +14,7 @@
     class CommunicationControl {
         public:
             CommunicationControl();
-            void init_communication();
+            void initCommunication();
             void connectToClient();
             void convertAsyncUDPPacketToUDPMessage(AsyncUDPPacket packet, Communication::UdpMessage<String>* output);
             void receiveData(String* output); 

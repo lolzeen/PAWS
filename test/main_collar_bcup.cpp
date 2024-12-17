@@ -1,12 +1,10 @@
 #include "Config.h"
 #include <Arduino.h>
 #include "SmartCollar.h"
-#include "SmartServer.h"
 
 #ifdef IS_CLIENT
 SmartCollar smartCollarOne;
 #endif
-
 
 bool enable_live_logging = true;
 bool acquire_data = true;

@@ -1,3 +1,5 @@
+#include "Config.h"
+#ifdef IS_CLIENT
 #ifndef PAWS_LIB_SENSOR_CONTROL_H
 #define PAWS_LIB_SENSOR_CONTROL_H
 
@@ -13,7 +15,7 @@ public:
 
     SensorData getReading();
     void getSensorUUIDAsCharArray(char *output);
-    void init_sensors();
+    void initSensors();
     void parseSensorDataToCharArray(const SensorData &data, char *output, size_t outputSize);
     void performReading();
 
@@ -26,3 +28,4 @@ private:
 };
 
 #endif // PAWS_LIB_SENSOR_CONTROL_H
+#endif // IS_CLIENT

@@ -1,4 +1,5 @@
 #include "Config.h"
+#ifdef IS_CLIENT
 #include "SensorControl.h"
 #include "ArduinoLog.h"
 
@@ -6,7 +7,7 @@ SensorControl::SensorControl()
 {
 }
 
-void SensorControl::init_sensors()
+void SensorControl::initSensors()
 {
     Log.noticeln(F("Initializing SensorControl...\n"));
     Wire.begin(MPU_SDA_PIN, MPU_SCL_PIN, I2C_FREQ);
@@ -81,3 +82,4 @@ void SensorControl::performReading()
     Log.traceln(F("Captured Sensor Data: %s\n"), parsedData);
     buffer.includeData(data);
 }
+#endif // IS_CLIENT

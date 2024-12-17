@@ -2,7 +2,7 @@
 
 CommunicationControl::CommunicationControl() {}
 
-void CommunicationControl::init_communication()
+void CommunicationControl::initCommunication()
 {
     Log.traceln(F("CommunicationControl initialization started."));
 #ifdef IS_SERVER
@@ -32,7 +32,7 @@ void CommunicationControl::connectToClient()
     // get client ip
     // WiFi.broadcastIP()
     IPv6Address clientIp;
-    uint16_t clientPort;
+    uint16_t clientPort = 5050;
     _udp.connect(clientIp, clientPort);
 #endif
 }

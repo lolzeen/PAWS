@@ -2,20 +2,21 @@
 #include "ArduinoLog.h"
 
 #define IS_SERVER
-//#define IS_CLIENT
+// #define IS_CLIENT
 
 // #define HAS_RTC
 // #define HAS_BATTERY
+#define ENABLE_GYRO
 
 #define BAUDRATE 115200
 
-#define WIFI_SSID "ssid"
+#define WIFI_SSID "PAWS-SERVER"
 #define WIFI_PSK "itjx0475"
 
 #ifdef IS_SERVER
     #define ENC_A_PIN 25
     #define ENC_B_PIN 33
-    #define ENC_BTN_PIN 35
+    #define BTN_PIN 35
     #define BUZ_PIN 32
     #define LCD_RW_PIN 23 
     #define LCD_RS_PIN 22
